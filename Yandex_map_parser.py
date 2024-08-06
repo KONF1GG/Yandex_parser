@@ -7,12 +7,17 @@ from selenium.webdriver.common.keys import Keys
 import time
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
+from xvfbwrapper import Xvfb
 
 class YandexMapParser:
     def __init__(self):
+        self.vdisplay = Xvfb()
+        self.vdisplay.start()
         o = Options()
         # Опция, чтобы браузер не закрывался
         o.add_experimental_option("detach", True)
+        o.add_argument("--no-sandbox")
+        o.add_argument("--disable-setuid-sandbox")
         o.add_argument(f'--user_agent={UserAgent().random}')
         # o.add_argument('--headless') # Uncomment this line for headless mode
         self.driver = webdriver.Chrome(options=o)
@@ -68,3 +73,4 @@ class YandexMapParser:
 
     def close_browser(self):
         self.driver.quit()
+        self.vdisplay.stop()

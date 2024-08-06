@@ -2,15 +2,18 @@ from flask import Flask, request, jsonify
 from Yandex_map_parser import YandexMapParser
 import functions
 
+
 app = Flask(__name__)
 
 @app.route('/get_location', methods=['GET'])
 def get_location():
     address = request.args.get('address')
+    print(address)
     if not address:
         return jsonify({"error": "Address parameter is required"}), 400
 
     location_from_NOMI = functions.get_location(address)
+
 
     if not location_from_NOMI:
         parser = YandexMapParser()
