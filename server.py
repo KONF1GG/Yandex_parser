@@ -20,7 +20,7 @@ def get_location():
         location = parser.get_location_from_Yandex(address)
         parser.close_browser()
 
-        return jsonify(location)
+        return jsonify([float(location['latitude']), float(location['longitude'])])
 
     else:
         return jsonify(location_from_NOMI)
