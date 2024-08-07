@@ -29,17 +29,23 @@ def get_location():
             parser = YandexMapParser()
             location = parser.get_location_from_Yandex(functions.modify_address_for_Yandex(address))
 
-            # Проверяем наличие ключа 'input_not_found' и его значение
-            if not location['Input_not_found']:
+            if location == None:
                 parser.close_browser()
-                if functions.check_address_correct(address, house_number):
-                    return jsonify([float(location['latitude']), float(location['longitude'])])
-                else:
-                    return jsonify({"error": "Location not found"}), 404
+                return jsonify({"error": "Location not found"}), 404
+            else:
+
+                # Проверяем наличие ключа 'input_not_found' и его значение
+                if not location['Input_not_found']:
+                    parser.close_browser()
+                    if functions.check_address_correct(address, house_number):
+                        return jsonify([float(location['latitude']), float(location['longitude'])])
+                    else:
+                        return jsonify({"error": "Location not found"}), 404
 
             # Если 'input_not_found' = True, ждем 3 секунд и пробуем снова
             parser.close_browser()
             time.sleep(5)
+
 
         # Если после всех попыток результат тот же, возвращаем ошибку
         return jsonify({"error": "Location not found. Maybe scrip got capcha!"}), 404
