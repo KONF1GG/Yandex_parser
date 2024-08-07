@@ -7,12 +7,12 @@ from selenium.webdriver.common.keys import Keys
 import time
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-from xvfbwrapper import Xvfb
+# from xvfbwrapper import Xvfb
 
 class YandexMapParser:
     def __init__(self):
-        self.vdisplay = Xvfb()
-        self.vdisplay.start()
+        # self.vdisplay = Xvfb()
+        # self.vdisplay.start()
         o = Options()
         # Опция, чтобы браузер не закрывался
         o.add_experimental_option("detach", True)
@@ -21,7 +21,7 @@ class YandexMapParser:
         o.add_argument(f'--user_agent={UserAgent().random}')
         # o.add_argument('--headless') # Uncomment this line for headless mode
         self.driver = webdriver.Chrome(options=o)
-        self.driver.get('https://yandex.ru/maps')
+        self.driver.get('https://yandex.ru/maps/')
 
     # Функция для получаения координат из Яндекс карт по адресу
     def get_location_from_Yandex(self, address):
@@ -73,4 +73,4 @@ class YandexMapParser:
 
     def close_browser(self):
         self.driver.quit()
-        self.vdisplay.stop()
+        # self.vdisplay.stop()
