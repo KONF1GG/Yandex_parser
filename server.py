@@ -1,12 +1,10 @@
-import time
-
 from flask import Flask, request, jsonify
 from Yandex_map_parser import YandexMapParser
 import functions
+import time
 
 app = Flask(__name__)
 parser = YandexMapParser()
-
 
 @app.route('/get_location', methods=['GET'])
 def get_location():
@@ -23,7 +21,7 @@ def get_location():
         return jsonify(location_from_NOMI)
     else:
         location = parser.get_location_from_Yandex(functions.modify_address_for_Yandex(address))
-        print(location)
+
         if location is None:
             parser.clear_cookies()
             parser.restart_browser()
@@ -38,7 +36,8 @@ def get_location():
         time.sleep(5)  # Подождите перед повторной попыткой
         return jsonify({"error": "Location not found. Maybe script got captcha!"}), 404
 
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    try:
+        app.run(host='0.0.0.0', port=8080)
+    finally:
+        parser.stop_browser()  # Убедитесь, что Xvfb остановлен при выходе

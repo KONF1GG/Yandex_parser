@@ -4,13 +4,15 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import time
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-
+from xvfbwrapper import Xvfb
+import time
 
 class YandexMapParser:
     def __init__(self):
+        self.vdisplay = Xvfb()
+        self.vdisplay.start()  # Запуск Xvfb
         self.start_browser()
 
     def start_browser(self):
@@ -19,7 +21,7 @@ class YandexMapParser:
         o.add_argument("--no-sandbox")
         o.add_argument("--disable-setuid-sandbox")
         o.add_argument(f'--user_agent={UserAgent().random}')
-
+        o.add_argument('--headless')  # Графический интерфейс отключен
         self.driver = webdriver.Chrome(options=o)
         self.driver.get('https://yandex.ru/maps/')
 
@@ -72,3 +74,7 @@ class YandexMapParser:
             location_dict = None
 
         return location_dict
+
+    def stop_browser(self):
+        self.driver.quit()
+        self.vdisplay.stop()  # Остановка Xvfb
