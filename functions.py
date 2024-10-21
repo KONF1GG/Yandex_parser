@@ -20,12 +20,20 @@ def get_location(address):
 
 
 def check_address_correct(address, house_number):
+    # Удаляем лишние символы из house_number
     house_number = re.sub(r'[\\]', '', house_number)
     cleaned_house_number = re.sub(r'[\\/]', '', house_number)
-    if house_number == address.split()[-1] or cleaned_house_number == address.split()[-1]:
-        return True
-    else:
-        return False
+
+    # Используем регулярное выражение для извлечения номера дома из адреса
+    match = re.search(r'(\d+(/[1-9])?)$', address)
+
+    if match:
+        extracted_number = match.group(0)  # Это номер дома из адреса
+
+        # Сравниваем извлеченный номер с house_number и cleaned_house_number
+        if extracted_number == house_number or extracted_number == cleaned_house_number:
+            return True
+    return False
 
 
 def clean_address(address):
