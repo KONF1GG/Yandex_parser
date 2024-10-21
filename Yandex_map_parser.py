@@ -19,7 +19,7 @@ class YandexMapParser:
         o.add_argument("--no-sandbox")
         o.add_argument("--disable-setuid-sandbox")
         o.add_argument(f'--user_agent={UserAgent().random}')
-
+        o.add_argument(f'--headless')
         self.driver = webdriver.Chrome(options=o)
         self.driver.get('https://yandex.ru/maps/')
 
